@@ -24,7 +24,7 @@ podTemplate(label: label, yaml: """
             updateGitlabCommitStatus name: 'setup', state: 'success'
         }
         stage('power-bi-trino-connector build') {
-            withCredentials([usernamePassword(credentialsId: 'power-bi-trino-connector-secret, passwordVariable: 'TRINO_OAUTH_SECRET_ID', usernameVariable: 'TRINO_OAUTH_CLIENT_ID')]) {
+            withCredentials([usernamePassword(credentialsId: 'power-bi-trino-connector-secret', passwordVariable: 'TRINO_OAUTH_SECRET_ID', usernameVariable: 'TRINO_OAUTH_CLIENT_ID')]) {
                 container('cct-datascience-base') {
                         sh label: 'sub_script', script: '''#!/usr/bin/env bash
                             sed "s/<OAUTH_CLIENT_ID_GOES_HERE>/"${TRINO_OAUTH_CLIENT_ID}"/" ./Trino.pq.tmpl > /tmp/Trino.pq
