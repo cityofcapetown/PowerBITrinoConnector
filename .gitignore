@@ -1,1 +1,2 @@
 oauth_config_*
+/resources/powerbi-trino-connector-secrets.yaml
