@@ -1,12 +1,13 @@
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
-/////////////                                                                    /////////////
-/////////////    Title: Trino Connector for Power BI                             ///////////// 
-/////////////    Created by: Patrick Pichler (patrick.pichler@creativedata.io)   ///////////// 
-/////////////    Website: https://github.com/pichlerpa/PowerBITrinoConnector     ///////////// 
-/////////////                                                                    ///////////// 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+/////////////                                                                     /////////////
+/////////////    Title: Trino Connector for Power BI at City of Cape Town         /////////////
+/////////////    Created by: Patrick Pichler (patrick.pichler@creativedata.io)    /////////////
+/////////////    Modified by: Gordon Inggs (gordon.inggs@capetown.gov.za)         /////////////
+/////////////    Website: https://github.com/cityofcapetown/PowerBITrinoConnector /////////////
+/////////////                                                                     /////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 section Trino;
 
@@ -18,25 +19,25 @@ shared TrinoType = type function (
         DataSource.Path = true,
         Documentation.FieldCaption = "Host",
         Documentation.FieldDescription = "The host name of the Trino coordinator.",
-        Documentation.SampleValues = {"trinohost"}
+        Documentation.SampleValues = {"trino-dev.capetown.gov.za"}
     ]),
     Port as (type number meta [
         DataSource.Path = true,
         Documentation.FieldCaption = "Port",
         Documentation.FieldDescription = "The port to connect the Trino coordinator. Default: http=8080, https=8443",
-        Documentation.SampleValues = {8080}
+        Documentation.SampleValues = {443}
     ]),
     optional Catalog as (type text meta [
         DataSource.Path = false,
         Documentation.FieldCaption = "Catalog",
         Documentation.FieldDescription = "The catalog name to run queries against. Default: All",
-        Documentation.SampleValues = {"Hive"}
+        Documentation.SampleValues = {"internal-dev"}
     ]),
     optional User as (type text meta [
-        DataSource.Path = false,
+        DataSource.Path = true,
         Documentation.FieldCaption = "User",
-        Documentation.FieldDescription = "The user name associated with the query. Default: TrinoPBI",
-        Documentation.SampleValues = {"TrinoPBI"}
+        Documentation.FieldDescription = "The user name associated with the query. Use your City username. Default: ",
+        Documentation.SampleValues = {"ginggs"}
     ]),
     optional Retries as (type number meta [
         DataSource.Path = false,
@@ -429,12 +430,13 @@ TrinoNavTableLeafLeaf = (url as text, Catalog as text, Schema as text, optional 
 //////////////////////
 
 // OAuth2 values
+client_id = <OAUTH_CLIENT_ID_GOES_HERE>;
+client_secret = <OAUTH_SECRET_ID_GOES_HERE>;
+
 redirect_uri = "https://oauth.powerbi.com/views/oauthredirect.html";
-client_id = Text.FromBinary(Extension.Contents("oauth_config_client_id.txt"));
-client_secret = Text.FromBinary(Extension.Contents("oauth_config_client_secret.txt"));
-authorize_uri = Text.FromBinary(Extension.Contents("oauth_config_authorize_uri.txt"));
-scopes = Text.FromBinary(Extension.Contents("oauth_config_scopes.txt"));
-token_uri = Text.FromBinary(Extension.Contents("oauth_config_token_uri.txt"));
+authorize_uri = " https://ds1.capetown.gov.za/ds_gitlab/oauth/authorize";
+scopes = "openid";
+token_uri = "https://ds1.capetown.gov.za/ds_gitlab/oauth/token";
 
 //Data Source Kind description
 Trino = [
@@ -509,7 +511,7 @@ TokenMethod = (code) =>
 Trino.Publish = [
     Beta = true,
     Category = "Database",
-    ButtonText = { Extension.LoadString("ButtonTitle"), Extension.LoadString("ButtonHelp") },
+    ButtonText = { "Trino", "Connect to Trino" },
     LearnMoreUrl = "https://powerbi.microsoft.com/",
     SourceImage = Trino.Icons,
     SourceTypeImage = Trino.Icons
