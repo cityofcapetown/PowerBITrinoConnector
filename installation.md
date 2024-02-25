@@ -1,4 +1,6 @@
 # OPM Data Science Trino Connector Use Notes
+<img src="./img/cct-logo.png" style="display: block;margin-left: auto; margin-right: auto"/>
+
 ## How to Connect to OPM Data Science's Trino
 ### Requirements
 * You must have PowerBI Desktop installed on your laptop.
